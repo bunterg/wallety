@@ -1,0 +1,34 @@
+{
+    "config": {
+        "apiKey": "AIzaSyDA91e3b2ZZ5d6OtSpGxHUxlWZHyOWH4F0",
+        "authDomain": "wallety-e177b.firebaseapp.com",
+        "databaseURL": "https://wallety-e177b.firebaseio.com",
+        "storageBucket": "wallety-e177b.appspot.com",
+        "messagingSenderId": "326928575253"
+    },
+    "ref": {
+        "test": "/test/",
+        "deuda":"/Deudas/",
+        "gasto":"/Gastos/",
+        "pago":"/Pagos/",
+        "user": "/user/",
+        "data": "/data/",
+        "cliente":"/Clientes/",
+        "conf":"/conf/tab/"
+    },
+    "model": {
+        "name":"Anonymous",
+        "Deudas": {
+            "hola":"mundo"
+        },
+        "Gastos": {
+            "hola":"mundo"
+        },
+        "Pagos": {
+            "hola":"mundo"
+        },
+        "Clientes": {
+            "hola":"mundo"
+        }
+    }
+}

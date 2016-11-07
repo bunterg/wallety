@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<head lang="es">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="pag para recordar eventos proximos">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>AgendarIO by BMGG</title>
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Material Design Lite">
+
+  <!-- Tile icon for Win8 (144x144 + tile color) -->
+  <meta name="msapplication-TileColor" content="#3372DF">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <style>
+    .menu li:hover {
+      background-color: #ECEFF1;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    
+    .row::after {
+      content: "";
+      clear: both;
+      display: block;
+    }
+    
+    [class*="col-"] {
+      float: left;
+      padding: 15px;
+    }
+
+    html {
+      font-family: "Roboto", sans-serif;
+    }
+
+    /* For mobile phones: */
+    
+    [class*="col-"] {
+      width: 100%;
+    }
+    
+    @media only screen and (min-width: 600px) {
+      /* For tablets: */
+      .col-m-1 {
+        width: 8.33%;
+      }
+      .col-m-2 {
+        width: 16.66%;
+      }
+      .col-m-3 {
+        width: 25%;
+      }
+      .col-m-4 {
+        width: 33.33%;
+      }
+      .col-m-5 {
+        width: 41.66%;
+      }
+      .col-m-6 {
+        width: 50%;
+      }
+      .col-m-7 {
+        width: 58.33%;
+      }
+      .col-m-8 {
+        width: 66.66%;
+      }
+      .col-m-9 {
+        width: 75%;
+      }
+      .col-m-10 {
+        width: 83.33%;
+      }
+      .col-m-11 {
+        width: 91.66%;
+      }
+      .col-m-12 {
+        width: 100%;
+      }
+    }
+    
+    @media only screen and (min-width: 768px) {
+      /* For desktop: */
+      .col-1 {
+        width: 8.33%;
+      }
+      .col-2 {
+        width: 16.66%;
+      }
+      .col-3 {
+        width: 25%;
+      }
+      .col-4 {
+        width: 33.33%;
+      }
+      .col-5 {
+        width: 41.66%;
+      }
+      .col-6 {
+        width: 50%;
+      }
+      .col-7 {
+        width: 58.33%;
+      }
+      .col-8 {
+        width: 66.66%;
+      }
+      .col-9 {
+        width: 75%;
+      }
+      .col-10 {
+        width: 83.33%;
+      }
+      .col-11 {
+        width: 91.66%;
+      }
+      .col-12 {width: 100%;}
+    }
+    .menu ul {
+      list-style: none;
+      padding: 0;
+    }
+    .content ul {
+      list-style: none;
+      padding: 0;
+    }
+    .content li {
+      height: 28px;
+      margin-bottom: 2px;
+      border-radius: 4px;
+    }
+    .content i {
+      color: white;
+    }
+    .menu li {
+      padding-left: 1.3em;
+      padding-bottom: 1.3em;
+      border: 0.3em none;
+      border-left-style: solid;
+    }
+    ul label {
+      background: lightgray;
+      font-size: 0.8em;
+      border-radius: 8px;
+      padding: 6px;
+      margin-right: 6px;
+    }
+    .btn {
+      border: none;
+      background-color: #fff;
+      font-size: 1em;
+      padding: 0.4em;
+      min-width: 1em;
+    }
+    .btn-small {
+      font-size: 0.7em;
+      padding: 0.3em;
+    }
+    .btn-primary {
+      background-color: #009688;
+      color: white;
+    }
+    .pull-right {
+      float: right;
+    }
+    textarea {
+      max-width: calc(100% - 16px);
+      resize:vertical;/*will prevent resizing horizontally*/ 
+    }
+    fieldset {
+      border-color: #009688;
+    }
+  </style>
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+  <div class="container">
+    <div class="row col-8 menu">
+      <div>
+        <input type="checkbox" ng-model="deleteEvents">
+        <label>Eliminar Eventos</label>        
+      </div>
+      <ul>
+        <li ng-repeat="e in event | orderBy:'date' | filter:filtrado" ng-style="{'border-color': e.color}">
+          <h3>{{e.description}}</h3>
+          <p>{{getFecha(e)}}</p>
+          <label ng-repeat="t in e.tags track by $index" >{{t}}</label>
+          <button class="btn pull-right" ng-show="deleteEvents" ng-click="deleteEvent(e.key)"><i class="material-icons">delete</i></button>
+        </li>
+      </ul>
+    </div>
+    <div class="col-4 content">
+        <fieldset>
+          <legend><strong>Nuevo evento</strong></legend>
+          <div>
+            <label for="desc">Descripción</label>
+            <br>
+            <textarea rows="5" cols="30" placeholder="Escriba aqui..." ng-model="description"></textarea>
+          </div>
+          <br>
+          <div>
+            <label for="fecha">Fecha</label>
+            <input type="datetime-local" class="pull-right" name="fecha" 
+              ng-model="date"
+              value="{{date | date:'yyyy-MM-ddThh:mm'}}"
+              min="{{minDate | date:'yyyy-MM-ddThh:mm'}}">
+          </div>
+          <br>
+          <div>
+            <input type="checkbox" name="rango" ng-model="rango">
+            <label for="rango">Rango de fecha</label>
+          </div>
+          <br>
+          <div ng-show="rango">
+            <label for="fecha-fin">Fecha</label>
+            <input type="datetime-local" class="pull-right" name="fecha-fin" ng-model="endDate"
+            min="{{date | date:'yyyy-MM-ddThh:mm'}}">
+          </div>
+          <br>
+          <hr>
+          <form name="etiqueta" ng-submit="newTag()">
+            <label>Etiquetas</label>
+            <input type="text" class="pull-right" ng-model="tagInput" placeholder="Escriba etiquetas...">
+          </form>
+          <br>
+          <div>            
+            <ul>
+              <li ng-repeat="t in tags track by $index">
+                <button class="btn btn-small" ng-click="deleteTag($index)"><h3><strong>X</strong></h3></button>
+                <label>{{t}}</label>
+              </li>
+            </ul>
+          </div>
+          <br>
+          <hr>
+          <div>                    
+            <label>Seleccione color</label>
+            <ul>
+              <li ng-repeat="c in color" ng-style="{'background': c}" ng-click="selection($index)">
+                <i ng-show="$index === selected" class="material-icons">done</i>
+                <a ng-style="{'color': c}">AgendarIO</a>
+              </li>
+            </ul>
+          </div>
+          <br>
+          <button ng-click="newEvent()" class="btn btn-primary">Enviar</button>
+          <button ng-click="reset()" class="btn pull-right">Restablecer</button>
+        </fieldset>
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope, $http, $filter) {
+      var url = 'https://agendario-144901.firebaseio.com/evento/.json';
+      var urlDel = 'https://agendario-144901.firebaseio.com/evento/';
+      var urlDelEnd = '/.json';
+      $scope.event = '';
+      $scope.color = ['#EF6C00', '#F44336', '#E91E63', '#009688', '#2196F3', '#3F51B5', '#2E7D32', '#607D8B'];
+      $scope.date = new Date();
+      // setup method
+      var getEvent = () => {
+        $http.get(url).then((res)=>{
+          var myObj = res.data;
+          $scope.event = Object.keys(myObj).map(function(key) {
+            myObj[key].key = key;
+            // qqqq wwwwww  qeeeewwqrwwwwwfwwwwwwwwwwwwwwwwqweeeqmyObj[key].date = $filter('date')( myObj[key].date,'dd-MM-yyyy hh:mm');
+            //myObj[key].endDate = $filter('date')( myObj[key].date,'dd-MM-yyyy hh:mm');
+            return myObj[key];
+          });
+          console.log($scope.event);
+          }, (err) => {
+            console.log(err);
+        });        
+      };      
+      $scope.reset = () => {
+        $scope.tags = ['general'];
+        $scope.selected = 0;
+        $scope.minDate = new Date();
+        $scope.date = $scope.minDate;
+        $scope.rango = false;
+        $scope.endDate = '';
+        $scope.description = '';
+      };
+      // setup
+      getEvent();
+      $scope.reset();
+      
+      // Create
+      $scope.getFecha = (e) => {
+        if(e.rango) {
+          return e.date + ' - ' + e.endDate;
+        }
+        return e.date;
+      }
+      $scope.newEvent = () => {
+        if($scope.description) {
+          
+          var event = {
+            tags: $scope.tags,
+            color: $scope.color[$scope.selected],
+            date: $scope.date,
+            rango: $scope.rango,
+            endDate: $scope.endDate,
+            description: $scope.description
+          };
+          $http.post(url,event).then((res)=>{
+            getEvent();
+            $scope.reset();
+          }, (err) => {
+            console.log(err);
+          });          
+        }
+      };
+      $scope.deleteEvent = (key) => {
+        $http.delete(urlDel + key + urlDelEnd).then((res) => {
+          getEvent();
+          console.log('eliminado');
+        }, (err) => {
+          console.log(err);
+        });
+      };
+      $scope.newTag = () => {
+        if($scope.tagInput) {
+          $scope.tags.push($scope.tagInput);
+          $scope.tagInput = '';
+        }
+      };
+      $scope.selection = (index) => {
+        $scope.selected = index;
+      };
+      $scope.deleteTag = (index) => {
+        $scope.tags.splice(index, 1);
+      };
+      $scope.filtrado = (e) => {
+        var date = $filter('date')( e.date,'yyyy-MM-ddThh:mm');
+        var now = $filter('date')(new Date(),'yyyy-MM-ddThh:mm');
+        return date > now;
+      };
+    });
+  </script>  
+</body>

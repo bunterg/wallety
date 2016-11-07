@@ -1,0 +1,43 @@
+{
+  "name": "wallety",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "build": {
+    "appId": "bmgg.electron"
+  },
+  "scripts": {
+    "test": "gulp",
+    "start": "electron ./app/",
+    "electron": "electron ./app/",
+    "build":"electron-packager ./app Myapp --overwrite --platform=win32 --arch=ia32"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bunterg/electron-react.git"
+  },
+  "keywords": [
+    "Electron",
+    "React"
+  ],
+  "author": "Bernardo Garcia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bunterg/electron-react/issues"
+  },
+  "homepage": "https://github.com/bunterg/electron-react#readme",
+  "dependencies": {
+    "firebase": "^3.5.2",
+    "material-design-lite": "^1.2.1",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "redux": "^3.6.0"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.16.0",
+    "electron-packager": "^8.2.0",
+    "electron-prebuilt": "^1.4.5",
+    "gulp": "^3.9.1",
+    "gulp-react": "^3.1.0"
+  }
+}
