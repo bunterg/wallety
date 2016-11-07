@@ -1,8 +1,7 @@
 const React = require('react')
 const ReactDOM = require('react-dom')
 const { createStore} = require('redux')
-//const main = remote.require('./main.js')
-//const {AcceptReset} = require('./template/formbuttom')
+const { TabHead, TabContent } = require('./template/tab')
 const { remote } = require('electron')
 const { fireconf, getState } = remote.require('./index.js')
 const firebase = require('firebase')
@@ -34,28 +33,14 @@ const counter = (state = initialState, action) => {
   }
 }
 
-const TabHead = ({state}) => {
-  var row = []
-  state.conf.forEach((item, index) => {
-    row.push(React.createElement("a", {key: index, className: index === state.selected ? 'menu selected': 'menu', 
-    onClick: () => {store.dispatch({ type: 'CHANGE_PAGE', val: index})}}, item.name))
-  })
-  return React.createElement("div", null, row);
-};
-
-const TabContent = ({state}) => {
-  const tab = state.conf[state.selected].name
-  console.log('tab',tab)
-  return React.createElement("span", null, JSON.stringify(state[tab]))
-}
-
 const App = ({
   LogOut,
-  state
+  state,
+  store
 }) => (
   React.createElement("div", null, 
     React.createElement("button", {onClick: ()=>(LogOut())}, "Salir"), 
-    React.createElement(TabHead, {state: state}), 
+    React.createElement(TabHead, {state: state, store: store}), 
     React.createElement(TabContent, {state: state})
   )
 )
@@ -64,7 +49,7 @@ const store = createStore(counter)
 
 const renderer = () => {
   ReactDOM.render(
-    React.createElement(App, {LogOut: LogOut, state: store.getState()}),
+    React.createElement(App, {LogOut: LogOut, state: store.getState(), store: store}),
     document.getElementById('example'))
 }
 

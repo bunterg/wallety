@@ -2,7 +2,7 @@ const React = require('react')
 const ReactDOM = require('react-dom')
 const firebase = require('firebase')
 const { createStore} = require('redux')
-
+const { CustomButton } = require('./template/botones')
 const { remote } = require('electron')
 const { fireconf, moveToIndex } = remote.require('./index.js')
 
@@ -77,9 +77,7 @@ const LogOut = () => {
         // An error happened.
     });
 }
-const CustomButton = ({metodo, val}) => (
-    <button onClick={metodo}>{val}</button>
-)
+
 const Tittle = () => (
     <div>
         <h1>Wallety</h1>
